@@ -53,6 +53,9 @@ public class CommonProductService implements ProductService {
 
     @Override
     public void deleteByName(String name) {
-        getAll().removeIf(x -> x.getName().equals(name));
+        Product productToDelete = getAll().stream().filter(x -> name.equals(x.getName())).findFirst().orElse(null);
+        if (productToDelete != null) {
+            deleteById(productToDelete.getId());
+        }
     }
 }

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static de.telran.g10170123ebeshop.domain.database.MySqlConnector.getConnection;
 import static de.telran.g10170123ebeshop.constants.Constants.*;
@@ -54,7 +55,8 @@ public class MySqlProductRepository implements ProductRepository {
     @Override
     public void add(String name, double price) {
         try (Connection connection = getConnection()) {
-
+            String query = String.format(Locale.US, "INSERT INTO `product` (`name`, `price`) VALUES ('%s', '%.2f');", name, price);
+            connection.createStatement().execute(query);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -63,7 +65,8 @@ public class MySqlProductRepository implements ProductRepository {
     @Override
     public void delete(int id) {
         try (Connection connection = getConnection()) {
-
+            String query = String.format("DELETE FROM `product` WHERE (`product_id` = '%d');", id);
+            connection.createStatement().execute(query);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

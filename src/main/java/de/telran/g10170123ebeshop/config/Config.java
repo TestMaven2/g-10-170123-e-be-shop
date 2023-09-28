@@ -38,8 +38,8 @@ public class Config {
         return new CommonCustomerService();
     }
 
-    @Bean
-    public ProductService productService() {
-        return new CommonProductService();
-    }
+//    @Bean
+//    public ProductService productService() {
+//        return new CommonProductService();
+//    }
 }

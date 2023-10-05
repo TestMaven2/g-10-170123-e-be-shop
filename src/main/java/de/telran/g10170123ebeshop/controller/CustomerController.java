@@ -2,6 +2,7 @@ package de.telran.g10170123ebeshop.controller;
 
 import de.telran.g10170123ebeshop.domain.entity.common.CommonCustomer;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
+import de.telran.g10170123ebeshop.exception.exceptions.CustomerIdDoesNotExistException;
 import de.telran.g10170123ebeshop.service.interfaces.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,11 @@ public class CustomerController {
      */
     @GetMapping("/{id}")
     public Customer getById(@PathVariable int id) {
-        return service.getById(id);
+        Customer customer = service.getById(id);
+        if (customer == null) {
+            throw new CustomerIdDoesNotExistException("Customer doesn`t exist!");
+        }
+        return customer;
     }
 
     /**

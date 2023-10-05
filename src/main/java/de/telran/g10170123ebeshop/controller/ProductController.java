@@ -2,8 +2,14 @@ package de.telran.g10170123ebeshop.controller;
 
 import de.telran.g10170123ebeshop.domain.entity.common.CommonProduct;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
+import de.telran.g10170123ebeshop.exception.Response;
+import de.telran.g10170123ebeshop.exception.exceptions.EmptyProductListException;
+import de.telran.g10170123ebeshop.exception.exceptions.EntityValidationException;
+import de.telran.g10170123ebeshop.exception.exceptions.IdDoesNotExistException;
 import de.telran.g10170123ebeshop.service.interfaces.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +37,11 @@ public class ProductController {
      */
     @GetMapping
     public List<Product> getAll() {
-        return service.getAll();
+        List<Product> all = service.getAll();
+        if (all.isEmpty()) {
+            throw new EmptyProductListException("Product list is empty!");
+        }
+        return all;
     }
 
     /**
@@ -42,7 +52,11 @@ public class ProductController {
      */
     @GetMapping("/{id}")
     public Product getById(@PathVariable int id) {
-        return service.getById(id);
+        Product product = service.getById(id);
+        if (product == null) {
+            throw new IdDoesNotExistException("Id doesn`t exist!");
+        }
+        return product;
     }
 
     /**
@@ -52,9 +66,13 @@ public class ProductController {
      * @return          объект сохраняемого продукта в случае успешного сохранения.
      */
     @PostMapping
-    public Product add(@RequestBody CommonProduct product) {
+    public Product add(@Valid @RequestBody CommonProduct product) {
+        try {
             service.addProduct(product);
             return product;
+        } catch (Exception e) {
+            throw new EntityValidationException(e.getMessage());
+        }
     }
 
     /**
@@ -105,5 +123,16 @@ public class ProductController {
     @GetMapping("/average")
     public double getAverage() {
         return service.getAveragePrice();
+    }
+
+    // Минус данного подхода заключается в том,
+    // что такой метод нужно писать в каждом контроллере,
+    // в котором мы хотим обрабатывать наши ошибки,
+    // либо размещать этот метод в супер-классе или интерфейсе,
+    // от которого наследуются наши контроллеры (а это не всегда удобно)
+    @ExceptionHandler(EmptyProductListException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Response handleException(EmptyProductListException e) {
+        return new Response(e.getMessage());
     }
 }

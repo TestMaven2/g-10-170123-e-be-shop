@@ -1,5 +1,6 @@
 package de.telran.g10170123ebeshop.domain.entity.jpa;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
 import jakarta.persistence.*;
 
@@ -15,6 +16,7 @@ public class JpaCustomer implements Customer {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "customer")
     private JpaCart cart;
 

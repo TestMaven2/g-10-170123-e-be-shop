@@ -33,10 +33,10 @@ public class Config {
         return new MySqlProductRepository();
     }
 
-    @Bean
-    public CustomerService customerService() {
-        return new CommonCustomerService();
-    }
+//    @Bean
+//    public CustomerService customerService() {
+//        return new CommonCustomerService();
+//    }
 
 //    @Bean
 //    public ProductService productService() {

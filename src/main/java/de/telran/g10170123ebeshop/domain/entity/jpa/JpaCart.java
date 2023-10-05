@@ -33,6 +33,10 @@ public class JpaCart implements Cart {
     public JpaCart() {
     }
 
+    public JpaCart(JpaCustomer customer) {
+        this.customer = customer;
+    }
+
     public int getId() {
         return id;
     }

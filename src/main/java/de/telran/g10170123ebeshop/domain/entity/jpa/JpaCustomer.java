@@ -21,6 +21,11 @@ public class JpaCustomer implements Customer {
     public JpaCustomer() {
     }
 
+    public JpaCustomer(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @Override
     public int getId() {
         return id;

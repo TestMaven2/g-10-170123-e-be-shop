@@ -10,6 +10,8 @@ import de.telran.g10170123ebeshop.repository.jpa.JpaCustomerRepository;
 import de.telran.g10170123ebeshop.repository.jpa.JpaProductRepository;
 import de.telran.g10170123ebeshop.service.interfaces.CustomerService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.List;
 
 @Service
 public class JpaCustomerService implements CustomerService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JpaCustomerService.class);
 
     @Autowired
     private JpaCustomerRepository repository;
@@ -35,6 +39,10 @@ public class JpaCustomerService implements CustomerService {
 
     @Override
     public Customer getById(int id) {
+        LOGGER.info("Запрошен покупатель с идентификатором {}.", id);
+        LOGGER.warn("Запрошен покупатель с идентификатором {}.", id);
+        LOGGER.error("Запрошен покупатель с идентификатором {}.", id);
+
         return repository.findById(id).orElse(null);
     }
 

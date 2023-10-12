@@ -2,7 +2,10 @@ package de.telran.g10170123ebeshop.service.jpa;
 
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
 import de.telran.g10170123ebeshop.domain.entity.jpa.JpaProduct;
+import de.telran.g10170123ebeshop.domain.entity.jpa.Task;
 import de.telran.g10170123ebeshop.repository.jpa.JpaProductRepository;
+import de.telran.g10170123ebeshop.repository.jpa.TaskRepository;
+import de.telran.g10170123ebeshop.scheduler.ScheduleExecutor;
 import de.telran.g10170123ebeshop.service.interfaces.ProductService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -21,8 +24,14 @@ public class JpaProductService implements ProductService {
     @Autowired
     private JpaProductRepository repository;
 
+    @Autowired
+    private TaskRepository taskRepository;
+
     @Override
     public List<Product> getAll() {
+        Task task = new Task("Task scheduled after getting all products");
+        taskRepository.save(task);
+        ScheduleExecutor.executeTask(task);
         return new ArrayList<>(repository.findAll());
     }
 
